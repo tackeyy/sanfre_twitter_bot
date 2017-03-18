@@ -88,7 +88,7 @@ module Sanfrecce
     end
 
     def to_result_txt(result)
-      "#{result[:time]} #{result[:home_team]}(Home) #{result[:score][:home][:total]} vs  #{result[:score][:away][:total]} #{result[:away_team]}(Away)"
+      "#{result[:time]} #{result[:home_team]}(Home) #{result[:score][:home][:total]} vs #{result[:score][:away][:total]} #{result[:away_team]}(Away)\n#sanfrecce"
     end
   end
 end
