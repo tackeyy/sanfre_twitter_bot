@@ -41,6 +41,7 @@ module Sanfrecce
     end
 
     def get_hoge_href(score_page)
+      time = ''
       home_team_name = ''
       away_team_name = ''
       home_first_score = ''
@@ -62,9 +63,13 @@ module Sanfrecce
 
         away_team_html = div.search('div[@class="awayTeam team"]')
         away_team_name = away_team_html.search('div[@class="name"]').text()
+
+        time_html = div.search('div[@class="main"]')
+        time = time_html.search('div[@class="status"]').text()
       end
 
       {
+        time: time,
         home_team: home_team_name,
         away_team: away_team_name,
         score: {
@@ -83,7 +88,7 @@ module Sanfrecce
     end
 
     def to_result_txt(result)
-      "#{result[:home_team]}(Home) #{result[:score][:home][:total]} vs  #{result[:score][:away][:total]} #{result[:away_team]}(Away)"
+      "#{result[:time]} #{result[:home_team]}(Home) #{result[:score][:home][:total]} vs  #{result[:score][:away][:total]} #{result[:away_team]}(Away)"
     end
   end
 end

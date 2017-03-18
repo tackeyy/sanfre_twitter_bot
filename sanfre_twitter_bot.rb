@@ -26,5 +26,6 @@ end
 if __FILE__ == $0
   bot = Sanfrecce::Bot.new
   game_result = bot.game_result
-  puts bot.tweet(game_result)
+  puts game_result
+  #puts bot.tweet(game_result)
 end
