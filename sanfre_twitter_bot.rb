@@ -16,6 +16,7 @@ module Sanfrecce
     def tweet
       content = @scraper.result
       return 'There is no content' if @twitter.duplicated_content?(content)
+      content = content.gsub('試合前', '次節')
       @twitter.tweet(content)
       content
     end
