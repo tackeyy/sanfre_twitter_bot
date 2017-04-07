@@ -13,18 +13,16 @@ module Sanfrecce
       @twitter = Sanfrecce::Twitter.new
     end
 
-    def game_result
-      @scraper.result
-    end
-
-    def tweet(content)
+    def tweet
+      content = @scraper.result
+      return 'There is no content' if @twitter.duplicated_content?(content)
       @twitter.tweet(content)
+      content
     end
   end
 end
 
 if __FILE__ == $0
   bot = Sanfrecce::Bot.new
-  game_result = bot.game_result
-  puts bot.tweet(game_result)
+  puts bot.tweet
 end
