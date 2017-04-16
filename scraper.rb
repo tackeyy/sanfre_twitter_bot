@@ -48,6 +48,8 @@ module Sanfrecce
       home_second_score = ''
       away_first_score = ''
       away_second_score = ''
+      next_geme_at = ''
+      next_geme_starts_at = ''
 
       score_page.search('div[@class="scoreBoard"]').each do |div|
         first_half_score_html = div.search('table[@class="score"] tr')
@@ -66,6 +68,15 @@ module Sanfrecce
 
         time_html = div.search('div[@class="main"]')
         time = time_html.search('div[@class="status"]').text()
+      end
+
+      if time == '試合前'
+        score_page.search('div[@class="note"]').each do |div|
+          return {
+            next_geme_starts_at: div.search('dl[@class="time"]').text(),
+            next_geme_at: div.search('dl[@class="stadium"]').text()
+          }
+        end
       end
 
       {
@@ -88,6 +99,11 @@ module Sanfrecce
     end
 
     def to_result_txt(result)
+      if result[:next_geme_starts_at].present?
+        return "次節 #{result[:next_geme_starts_at]} #{result[:next_geme_at]}\n#sanfrecce #jleague"
+      end
+
+      return '' if result[:score][:home][:total].blank? || result[:score][:away][:total].blank?
       "#{result[:time]} #{result[:home_team]}(Home) #{result[:score][:home][:total]} vs #{result[:score][:away][:total]} #{result[:away_team]}(Away)\n#sanfrecce #jleague"
     end
   end
