@@ -103,7 +103,7 @@ module Sanfrecce
         return "次節 #{result[:next_geme_starts_at]} #{result[:next_geme_at]}\n#sanfrecce #jleague"
       end
 
-      return '' if result[:score][:home][:total].blank? || result[:score][:away][:total].blank?
+      return '' if result[:home_team].blank? || result[:away_team].blank?
       "#{result[:time]} #{result[:home_team]}(Home) #{result[:score][:home][:total]} vs #{result[:score][:away][:total]} #{result[:away_team]}(Away)\n#sanfrecce #jleague"
     end
   end

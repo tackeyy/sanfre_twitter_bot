@@ -24,7 +24,7 @@ module Sanfrecce
 
     def tweet_draft
       content = @scraper.result
-      return 'There is no content' if @twitter.duplicated_content?(content)
+      return 'There is no content' if content.blank? || @twitter.duplicated_content?(content)
       content
     end
   end

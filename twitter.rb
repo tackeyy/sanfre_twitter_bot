@@ -20,9 +20,7 @@ module Sanfrecce
 
     def duplicated_content?(tweet_content)
       @client.user_timeline("#{ACCOUNT_NAME}", { count: 1 }).any? do |timeline|
-        tweeted_content = @client.status(timeline.id).text
-        return false unless tweeted_content == tweet_content
-        tweeted_content.include?('次節')
+        @client.status(timeline.id).text == tweet_content
       end
     end
   end
