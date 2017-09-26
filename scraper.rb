@@ -77,6 +77,14 @@ module Sanfrecce
         end
       end
 
+      goals = []
+      score_page.search('div[@class="gameSummaryBody partsTable"]//tbody//tr').each do |tr|
+        next if tr.search('td//em[@class="goal"]').blank?
+        goal_time   = tr.search('th[@class="time"]').children.first.text.strip
+        goal_getter = tr.search('td').text.gsub('得点：', '')
+        goals.push("#{goal_time}#{goal_getter}")
+      end
+
       {
         time: time,
         home_team: home_team_name,
@@ -92,7 +100,8 @@ module Sanfrecce
             second: away_second_score,
             total: away_first_score.to_i + away_second_score.to_i
           }
-        }
+        },
+        goals: goals
       }
     end
 
@@ -102,7 +111,11 @@ module Sanfrecce
       end
 
       return '' if result[:home_team].blank? || result[:away_team].blank?
-      "#{result[:time]} #{result[:home_team]}(Home) #{result[:score][:home][:total]} vs #{result[:score][:away][:total]} #{result[:away_team]}(Away)\n#sanfrecce #jleague"
+
+      score = "#{result[:time]} #{result[:home_team]}(Home) #{result[:score][:home][:total]} vs #{result[:score][:away][:total]} #{result[:away_team]}(Away)\n"
+      goals = "#{result[:goals].join("\n")}\n"
+      tags  = "#sanfrecce #jleague"
+      score + goals + tags
     end
   end
 end
