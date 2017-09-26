@@ -2,7 +2,7 @@ require 'mechanize'
 require 'nokogiri'
 
 module Sanfrecce
-  URL = 'http://soccer.yahoo.co.jp/jleague/league/j1'
+  URL = 'http://soccer.yahoo.co.jp/jleague/league/j1'.freeze
 
   class Scraper
     def initialize
@@ -17,7 +17,7 @@ module Sanfrecce
       score_href = get_score_href(tr_element)
 
       score_page = page.link_with(href: score_href.text).click
-      result = get_hoge_href(score_page)
+      result = get_game_detail(score_page)
       to_result_txt(result)
     end
 
@@ -40,7 +40,7 @@ module Sanfrecce
       tr_element.xpath('td[@class="score"]/a/@href')
     end
 
-    def get_hoge_href(score_page)
+    def get_game_detail(score_page)
       time = ''
       home_team_name = ''
       away_team_name = ''
@@ -48,8 +48,6 @@ module Sanfrecce
       home_second_score = ''
       away_first_score = ''
       away_second_score = ''
-      next_geme_at = ''
-      next_geme_starts_at = ''
 
       score_page.search('div[@class="scoreBoard"]').each do |div|
         first_half_score_html = div.search('table[@class="score"] tr')
