@@ -1,5 +1,7 @@
 require 'mechanize'
 require 'nokogiri'
+require './models/score.rb'
+require './models/team.rb'
 
 module Sanfrecce
   URL = 'http://soccer.yahoo.co.jp/jleague/league/j1'.freeze
@@ -9,7 +11,7 @@ module Sanfrecce
       @agent = Mechanize.new
     end
 
-    def result
+    def scrape
       page = @agent.get(URL)
       elements = page.search('div[@class="modBody"]//tbody//tr')
 
@@ -17,8 +19,7 @@ module Sanfrecce
       score_href = get_score_href(tr_element)
 
       score_page = page.link_with(href: score_href.text).click
-      result = get_game_detail(score_page)
-      to_result_txt(result)
+      get_game_detail_json(score_page)
     end
 
     private
@@ -40,7 +41,7 @@ module Sanfrecce
       tr_element.xpath('td[@class="score"]/a/@href')
     end
 
-    def get_game_detail(score_page)
+    def get_game_detail_json(score_page)
       time = ''
       home_team_name = ''
       away_team_name = ''
@@ -70,10 +71,11 @@ module Sanfrecce
 
       if time == '試合前'
         score_page.search('div[@class="note"]').each do |div|
-          return {
-            next_geme_starts_at: div.search('dl[@class="time"]').text(),
-            next_geme_at: div.search('dl[@class="stadium"]').text()
-          }
+          return Score.new(
+            status:               :inactive,
+            next_geme_start_at:   div.search('dl[@class="time"]').text(),
+            next_geme_stadium_at: div.search('dl[@class="stadium"]').text()
+          )
         end
       end
 
@@ -86,22 +88,21 @@ module Sanfrecce
       end
 
       {
-        time: time,
-        home_team: home_team_name,
-        away_team: away_team_name,
         score: {
-          home: {
-            first: home_first_score,
-            second: home_second_score,
-            total: home_first_score.to_i + home_second_score.to_i
-          },
-          away: {
-            first: away_first_score,
-            second: away_second_score,
-            total: away_first_score.to_i + away_second_score.to_i
-          }
+          time:   time,
+          goals:  goals,
+          status: :active
         },
-        goals: goals
+        home: {
+          name:         home_team_name,
+          second_first: home_first_score,
+          second_score: home_second_score
+        },
+        away: {
+          name:         away_team_name,
+          second_first: away_first_score,
+          second_score: away_second_score
+        }
       }
     end
 
