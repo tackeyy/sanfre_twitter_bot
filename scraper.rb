@@ -73,6 +73,7 @@ module Sanfrecce
         score_page.search('div[@class="note"]').each do |div|
           return Score.new(
             status:               :inactive,
+            date:                 url_to_date(url: score_page.uri.to_s),
             next_geme_start_at:   div.search('dl[@class="time"]').text(),
             next_geme_stadium_at: div.search('dl[@class="stadium"]').text()
           )
@@ -89,6 +90,7 @@ module Sanfrecce
 
       {
         score: {
+          date:   url_to_date(url: score_page.uri.to_s),
           time:   time,
           goals:  goals,
           status: :active
@@ -106,17 +108,8 @@ module Sanfrecce
       }
     end
 
-    def to_result_txt(result)
-      if result[:next_geme_starts_at].present?
-        return "次節 #{result[:next_geme_starts_at]} #{result[:next_geme_at]}\n#sanfrecce #jleague"
-      end
-
-      return '' if result[:home_team].blank? || result[:away_team].blank?
-
-      score = "#{result[:time]} #{result[:home_team]}(Home) #{result[:score][:home][:total]} vs #{result[:score][:away][:total]} #{result[:away_team]}(Away)\n"
-      goals = "#{result[:goals].join("\n")}\n"
-      tags  = "#sanfrecce #jleague"
-      score + goals + tags
+    def url_to_date(url: url)
+      Date.parse(url.split('/').last)
     end
   end
 end
