@@ -71,12 +71,14 @@ module Sanfrecce
 
       if time == '試合前'
         score_page.search('div[@class="note"]').each do |div|
-          return Score.new(
-            status:               :inactive,
-            date:                 url_to_date(url: score_page.uri.to_s),
-            next_geme_start_at:   div.search('dl[@class="time"]').text(),
-            next_geme_stadium_at: div.search('dl[@class="stadium"]').text()
-          )
+          return {
+            score: {
+              status:               :inactive,
+              date:                 url_to_date(url: score_page.uri.to_s),
+              next_game_start_at:   div.search('dl[@class="time"]').text(),
+              next_game_stadium_at: div.search('dl[@class="stadium"]').text()
+            }
+          }
         end
       end
 

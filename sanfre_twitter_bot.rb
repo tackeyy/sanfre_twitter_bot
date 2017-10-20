@@ -36,9 +36,12 @@ if __FILE__ == $0
   bot        = Sanfrecce::Bot.new
   score_json = bot.scrape
 
-  score           = Score.new(score_json[:score])
-  score.home_team = Team.new(score_json[:home])
-  score.away_team = Team.new(score_json[:away])
+  score = Score.new(score_json[:score])
+
+  if score.active?
+    score.home_team = Team.new(score_json[:home])
+    score.away_team = Team.new(score_json[:away])
+  end
 
   # puts bot.tweet(score.to_text)
   puts bot.tweet_draft(score.to_text)
