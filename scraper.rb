@@ -99,12 +99,12 @@ module Sanfrecce
         },
         home: {
           name:         home_team_name,
-          second_first: home_first_score,
+          first_score: home_first_score,
           second_score: home_second_score
         },
         away: {
           name:         away_team_name,
-          second_first: away_first_score,
+          first_score: away_first_score,
           second_score: away_second_score
         }
       }
