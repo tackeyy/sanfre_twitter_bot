@@ -110,7 +110,7 @@ module Sanfrecce
       }
     end
 
-    def url_to_date(url: url)
+    def url_to_date(url: nil)
       Date.parse(url.split('/').last)
     end
   end
