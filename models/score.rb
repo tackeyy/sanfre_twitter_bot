@@ -31,7 +31,7 @@ class Score
 
     score = "#{time} #{home_team.name}(Home) #{home_team.total_score} vs #{away_team.total_score} #{away_team.name}(Away)\n"
     # TODO: なぜかselfをつけないと値が取れない
-    goals = "#{self.goals.join("\n")}\n"
+    goals = "⚽️  #{self.goals.join(', ')}\n"
 
     score + goals + tweet_tags
   end
