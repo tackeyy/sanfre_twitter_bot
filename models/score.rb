@@ -27,9 +27,7 @@ class Score
       return "次節 #{next_game_start_at} #{next_game_stadium_at}\n#{tweet_tags}"
     end
 
-    # NOTE: 試合当日以外に試合スコアが取得できるのはおかしい（スクレイピング先のデータ状態に依存するためここではじく）
-    return '' unless date == Date.current
-    return '' if home_team.blank? || away_team.blank?
+    return '' unless valid_attrs?
 
     score = "#{time} #{home_team.name}(Home) #{home_team.total_score} vs #{away_team.total_score} #{away_team.name}(Away)\n"
     # TODO: なぜかselfをつけないと値が取れない
@@ -42,5 +40,17 @@ class Score
 
   def tweet_tags
     '#sanfrecce #jleague #サンフレッチェ広島 #サンフレッチェ #サンフレ'
+  end
+
+  def valid_attrs?
+    # NOTE: 試合当日以外に試合スコアが取得できるのはおかしい（スクレイピング先のデータ状態に依存するためここではじく）
+    return false unless todays_game?
+    return false if home_team.blank? || away_team.blank?
+    # NOTE: スコアと得点者をスクレイピングする箇所が異なり、それぞれでデータの更新のタイミングが違うため
+    (home_team.total_score + away_team.total_score) == goals.length
+  end
+
+  def todays_game?
+    date == Date.current
   end
 end
