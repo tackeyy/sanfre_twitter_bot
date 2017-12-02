@@ -85,9 +85,9 @@ module Sanfrecce
       goals = []
       score_page.search('div[@class="gameSummaryBody partsTable"]//tbody//tr').each do |tr|
         next if tr.search('td//em[@class="goal"]').blank?
-        goal_time   = tr.search('th[@class="time"]').children.first.text.strip
-        goal_getter = tr.search('td').text.gsub('得点：', '')
-        goals.push("#{goal_time}#{goal_getter}")
+        goal_time    = tr.search('th[@class="time"]').children.first.text.strip
+        goal_getters = tr.search('td').text().split("\n")
+        goals.push([goal_time, goal_getters])
       end
 
       {

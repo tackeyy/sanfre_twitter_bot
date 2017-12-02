@@ -29,11 +29,16 @@ class Score
 
     return '' unless valid_attrs?
 
-    score = "#{time} #{home_team.name}(Home) #{home_team.total_score} vs #{away_team.total_score} #{away_team.name}(Away)\n"
-    # TODO: なぜかselfをつけないと値が取れない
-    goals = "⚽️  #{self.goals.join(', ')}\n"
+    score = "#{time} #{home_team.name}(Home) #{home_team.total_score} vs #{away_team.total_score} #{away_team.name}(Away)"
+    goals = self.goals.map do |goal|
+      time = goal.first
+      assist = goal.second.first
+      getter = goal.second.second
 
-    score + goals + tweet_tags
+      "#{time} 👟  #{assist} ⚽️  #{getter} \n"
+    end.join
+
+    score + "\n" + goals + "\n" + tweet_tags
   end
 
   private
