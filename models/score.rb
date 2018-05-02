@@ -35,7 +35,7 @@ class Score
       assist = goal.second.first
       getter = goal.second.second
 
-      "#{time} 👟  #{assist} ⚽️  #{getter} \n"
+      "#{time} ⚽️  #{getter} \n"
     end.join
 
     score + "\n" + goals + "\n" + tweet_tags
@@ -44,7 +44,7 @@ class Score
   private
 
   def tweet_tags
-    '#sanfrecce #jleague #サンフレッチェ広島 #サンフレッチェ #サンフレ'
+    '#sanfrecce #jleague #Jリーグ #サンフレッチェ広島 #サンフレッチェ #サンフレ'
   end
 
   def valid_attrs?
