@@ -26,7 +26,6 @@ module Sanfrecce
     end
 
     def tweet_draft(content)
-      return 'Sanfrecce.tweet_draft There is no content' if content.blank? || @twitter.duplicated_content?(content)
       content
     end
   end
